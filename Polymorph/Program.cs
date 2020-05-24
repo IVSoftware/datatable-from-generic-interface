@@ -29,7 +29,6 @@ namespace Polymorph
                 }
                 Console.WriteLine();
             }
-            var table = ConvertToDataTable<IFoo>(GetData("foobar"));
             // Pause
             Console.ReadKey();
         }
