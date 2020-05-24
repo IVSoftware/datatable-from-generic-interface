@@ -12,10 +12,29 @@ namespace Polymorph
     {
         static void Main(string[] args)
         {
-            DataTable dt = ConvertToDataTable(GetData("foobar"));
+            DataTable dt;
 
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("Using GetData() default returns all IFoos in list.");
+            Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++" + Environment.NewLine);
+            dt = ConvertToDataTable(GetData());
             Console.WriteLine("D I S P L A Y    P O P U L A T E D    T A B L E");
+            DisplayTableInConsole(dt);
 
+            Console.WriteLine();
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("Using GetData(\"FooA\") returns specific class only.");
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++" + Environment.NewLine);
+            dt = ConvertToDataTable(GetData("FooA"));
+            Console.WriteLine("D I S P L A Y    P O P U L A T E D    T A B L E");
+            DisplayTableInConsole(dt);
+
+            // Pause
+            Console.ReadKey();
+        }
+
+        private static void DisplayTableInConsole(DataTable dt)
+        {
             foreach (DataColumn column in dt.Columns)
             {
                 Console.Write(column.ColumnName + "\t");
@@ -29,12 +48,22 @@ namespace Polymorph
                 }
                 Console.WriteLine();
             }
-            // Pause
-            Console.ReadKey();
         }
-        private static List<IFoo> GetData(string key)
+
+        private static List<IFoo> _testData = new List<IFoo> { new FooA(), new FooB() };
+        private static List<IFoo> GetData(string key = null)
         {
-            return new List<IFoo> { new FooA(), new FooB() };
+            if(string.IsNullOrWhiteSpace(key))
+            {
+                return _testData;
+            }
+            else
+            {
+                return 
+                    _testData
+                    .Where(match => match.GetType().Name == key)
+                    .ToList();
+            }
         }
         private static DataTable ConvertToDataTable<T>(IEnumerable<T> data)
         {
@@ -54,8 +83,7 @@ namespace Polymorph
                 table.Rows.Add(values);
 
                 #region D E B U G G I N G    I N F O
-                Console.WriteLine(@"Loop " + loop++);
-                Console.WriteLine(@"Concrete Type is: " + item.GetType().Name);
+                Console.WriteLine(@"Loop " + loop++ + " where concrete Type is: " + item.GetType().Name);
                 FooA fooA = item as FooA; 
                 Console.WriteLine(@"     FooA cast is: " + (fooA == null ? "Null" : "Successful"));
                 FooB fooB = item as FooB;
