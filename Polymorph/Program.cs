@@ -47,11 +47,20 @@ namespace Polymorph
             {
                 table.Columns.Add(prop.Name, prop.PropertyType).DataType = prop.PropertyType;
             }
+            int loop = 1;
             foreach (var item in data)
             {
-                Console.WriteLine(item.GetType().FullName);
                 object[] values = properties.Select(property => property.GetValue(item)).ToArray();
                 table.Rows.Add(values);
+
+                #region D E B U G G I N G    I N F O
+                Console.WriteLine(@"Loop " + loop++);
+                Console.WriteLine(@"Concrete Type is: " + item.GetType().Name);
+                FooA fooA = item as FooA; 
+                Console.WriteLine(@"     FooA cast is: " + (fooA == null ? "Null" : "Successful"));
+                FooB fooB = item as FooB;
+                Console.WriteLine(@"     FooB cast is: " + (fooB == null ? "Null" : "Successful"));
+                #endregion
             }
 
             Console.WriteLine();
