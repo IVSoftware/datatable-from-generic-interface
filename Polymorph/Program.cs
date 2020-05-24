@@ -14,6 +14,8 @@ namespace Polymorph
         {
             DataTable dt = ConvertToDataTable(GetData("foobar"));
 
+            Console.WriteLine("D I S P L A Y    P O P U L A T E D    T A B L E");
+
             foreach (DataColumn column in dt.Columns)
             {
                 Console.Write(column.ColumnName + "\t");
@@ -37,6 +39,8 @@ namespace Polymorph
         }
         private static DataTable ConvertToDataTable<T>(IEnumerable<T> data)
         {
+            Console.WriteLine("I N S I D E    G E N E R I C   M E T H O D");
+
             PropertyInfo[] properties = typeof(T).GetProperties();
 
             DataTable table = new DataTable();
@@ -46,9 +50,12 @@ namespace Polymorph
             }
             foreach (var item in data)
             {
+                Console.WriteLine(item.GetType().FullName);
                 object[] values = properties.Select(property => property.GetValue(item)).ToArray();
                 table.Rows.Add(values);
             }
+
+            Console.WriteLine();
             return table;
         }
     }
